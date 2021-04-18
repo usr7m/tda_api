@@ -10,7 +10,7 @@ import time
 client_id = 'CLIENT_ID'           # fill this out with your ID, JUST ID, nothing else. no @AMER.OA.... no, just ID
 redirect_uri = 'http://Localhost'
 
-''' chomium options and such '''
+''' chromium options and such '''
 
 options = webdriver.ChromeOptions()
 options.binary_location = which('chromium')
