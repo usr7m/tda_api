@@ -7,7 +7,8 @@ import time
 
 ''' API client_ID auth stuff: '''
 
-client_id = 'CLIENT_ID'           # fill this out with your ID, JUST ID, nothing else. no @AMER.OA.... no, just ID
+# fill this out with your ID, JUST ID, nothing else. no @AMER.OA.... no, just ID
+client_id = 'CLIENT_ID'           
 redirect_uri = 'http://Localhost'
 
 ''' chromium options and such '''
@@ -17,16 +18,13 @@ options.binary_location = which('chromium')
 chrome_driver_binary = '/PATH_TO/chromedriver'   # you will need a chromedriver for this (easily obtained), or work around manually
 driver = webdriver.Chrome(chrome_driver_binary, options=options)
 
-url = 'https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=' 
-        + redirect_uri\
-	      + '&client_id=' 
-        + client_id 
-        + '%40AMER.OAUTHAP'
+url = 'https://auth.tdameritrade.com/auth?response_type=code&redirect_uri='\ 
+        + redirect_uri + '&client_id=' + client_id + '%40AMER.OAUTHAP'
 
 driver.get(url)
 
 ''' this part can be skipped
-    and all forms filled out on the web as directed untill... '''
+    and all forms filled out on the web as directed until... '''
     
 print('TDA username: ')     # 
 tdauser = input()
@@ -79,6 +77,6 @@ def create_rtok_file(refresh_token):
 	f.write(refresh_token)
 	f.close()
 
-''' call it ^ '''
+''' call it '''
 
 create_rtok_file(refresh_token)
