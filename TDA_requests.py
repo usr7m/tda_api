@@ -3,11 +3,21 @@ import TDA_auth
 import pandas as pd
 import requests
 import os
+from datetime import datetime
 
 client_id = TDA_auth.client_id
 access_token = TDA_auth.access_token
 
-def historical(symbol, ext = 'true'):
+''' milliseconds since epoch '''
+ 
+def timestamp(dt):
+	dt = pd.to_datetime(dt).to_pydatetime()
+    epoch = datetime.utcfromtimestamp(0)
+    return int((dt - epoch).total_seconds() * 1000.0) 	# lose the .0 
+
+''' set endDate to tomorrow's date to get today's candle too '''
+
+def historical(symbol, startDate, endDate, ext = 'true'):
 	resp = requests.get('https://api.tdameritrade.com/v1/marketdata/' + symbol + '/pricehistory',
 						headers={'Authorization': 'Bearer ' + access_token},
 						params={'apikey': client_id,
@@ -15,6 +25,8 @@ def historical(symbol, ext = 'true'):
 								'period': 20,
 								'frequencyType': 'daily',
 								'frequency': 1,
+								'endDate': timestamp(endDate),
+								'startDate': timestamp(startDate), 
 								'needExtendedHoursData': ext })
 	print(resp.status_code)
 	''' print(resp.json().keys())
@@ -24,13 +36,14 @@ def historical(symbol, ext = 'true'):
 	return data
 
 
+
 def search_instruments(proj, symbol):
 	# posssible projections:
-	# symbol-search		symbol ex: 'SPY'
-	# symbol-regex			: 'SPY.*'		
-	# desc-search			: 'FakeCompany'
-	# desc-regex			: 'XYZ.[A-C]'
-	# fundamental			: 'SPY'
+	# symbol-search			symbol ex: 'SPY'
+	# symbol-regex					 : 'SPY.*'		
+	# desc-search					 : 'FakeCompany'
+	# desc-regex					 : 'XYZ.[A-C]'
+	# fundamental					 : 'SPY'
 	#
 	resp = requests.get('https://api.tdameritrade.com/v1/instruments',
 						headers={'Authorization': 'Bearer ' + access_token},
@@ -92,4 +105,12 @@ def option_chain(symbol):
 									# NS: Non-standard contracts
 									# ALL: All contracts
 	return resp.json()
+
+
+def get_accounts(fields):
+	resp = requests.get('https://api.tdameritrade.com/v1/accounts',
+						headers={'Authorization': 'Bearer ' + access_token},
+						params={'fields': fields})
+	return resp.json()
+
 
