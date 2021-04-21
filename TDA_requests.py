@@ -3,21 +3,25 @@ import TDA_auth
 import pandas as pd
 import requests
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 client_id = TDA_auth.client_id
 access_token = TDA_auth.access_token
 
-''' milliseconds since epoch '''
- 
+''' milliseconds since epoch ''' 
+
 def timestamp(dt):
 	dt = pd.to_datetime(dt).to_pydatetime()
-    epoch = datetime.utcfromtimestamp(0)
-    return int((dt - epoch).total_seconds() * 1000.0) 	# lose the .0 
+	epoch = datetime.utcfromtimestamp(0)
+	return int((dt - epoch).total_seconds() * 1000.0) 	
 
 ''' set endDate to tomorrow's date to get today's candle too '''
 
-def historical(symbol, startDate, endDate, ext = 'true'):
+endDate = datetime.today().date()
+startDate = datetime.today().date() - relativedelta(years = 10)
+
+def historical(symbol, startDate = startDate, endDate = endDate, ext = 'true'):
 	resp = requests.get('https://api.tdameritrade.com/v1/marketdata/' + symbol + '/pricehistory',
 						headers={'Authorization': 'Bearer ' + access_token},
 						params={'apikey': client_id,
@@ -34,7 +38,6 @@ def historical(symbol, startDate, endDate, ext = 'true'):
 	data = pd.DataFrame(resp.json()['candles'])
 	data['datetime'] = pd.to_datetime(data['datetime'], unit = 'ms').dt.date
 	return data
-
 
 
 def search_instruments(proj, symbol):
