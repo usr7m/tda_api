@@ -5,9 +5,10 @@ import os
 import requests
 
 client_id = 'CLIENT_ID' # fill this out with your API client_ID
-path_to_token_file = '/path/to/token_file/' # fill this out with path to your token file
+path_to_token_file = '/path/to/token.file'
+redirect_uri = 'https://localhost'
 
-# print(os.getcwd())
+print(os.getcwd())
 
 def read_tokens_from_file():
 	global refresh_token, refresh_token_expiry
@@ -33,7 +34,7 @@ def both_tokens_by_refresh(refresh_token, client_id):
                                'access_type': 'offline',
                                'code': '',
                                'client_id': client_id,
-                               'redirect_uri': ''})
+                               'redirect_uri': redirect_uri})
 	return (resp.json())
 
 def access_by_refresh(refresh_token, client_id):
@@ -45,7 +46,7 @@ def access_by_refresh(refresh_token, client_id):
                                'access_type': '',
                                'code': '',
                                'client_id': client_id,
-                               'redirect_uri': ''})
+                               'redirect_uri': redirect_uri})
 	access_token = resp.json()['access_token']
 
 def get_today_timestamp():
@@ -82,6 +83,10 @@ def authenticate():
 	read_tokens_from_file()
 	check_if_still_good()
 	access_by_refresh(refresh_token, client_id)
+
+
+
+
 
 
 
