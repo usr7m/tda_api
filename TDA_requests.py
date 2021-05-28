@@ -27,13 +27,13 @@ def historical(	symbol,
 	resp = requests.get('https://api.tdameritrade.com/v1/marketdata/' + symbol + '/pricehistory',
 			headers={'Authorization': 'Bearer ' + access_token},
 			params={'apikey': client_id,
-					'periodType': periodType,
-					'period': period,
-					'frequencyType': frequencyType,
-					'frequency': frequency,
-					'endDate': timestamp(endDate),
-					'startDate': timestamp(startDate), 
-					'needExtendedHoursData': ext })
+				'periodType': periodType,
+				'period': period,
+				'frequencyType': frequencyType,
+				'frequency': frequency,
+				'endDate': timestamp(endDate),
+				'startDate': timestamp(startDate), 
+				'needExtendedHoursData': ext })
 	print(resp.status_code)
 	return resp.json()
 
@@ -51,8 +51,8 @@ def search_instruments(symbol, proj):
 	resp = requests.get('https://api.tdameritrade.com/v1/instruments',
 			headers={'Authorization': 'Bearer ' + access_token},
 			params={'apikey': client_id,
-					'symbol': symbol,
-					'projection': proj})
+				'symbol': symbol,
+				'projection': proj})
 	'''
 	# print(resp.status_code)
 	# print(resp.json().keys())
@@ -63,7 +63,7 @@ def quotes(symbol):
 	resp = requests.get('https://api.tdameritrade.com/v1/marketdata/quotes',
 			headers={'Authorization': 'Bearer ' + access_token},
 			params={'apikey': client_id,
-					'symbol': symbol})
+				'symbol': symbol})
 	return resp.json()
 
 
@@ -163,12 +163,12 @@ def get_orders(account_id, status, fromDate, tillDate, order_id = ''):
 def get_transactions(account_id, t_type = 'ALL', symbol = '', startDate = '', endDate = ''):
 	uri = 'https://api.tdameritrade.com/v1/accounts/' 
 	resp = requests.get(uri + account_id + '/transactions',
-				headers={'Authorization': 'Bearer ' + access_token},
-				params={'type': t_type,
-					'symbol': symbol,
-					'startDate' : startDate,	#yyyy-MM-dd
-					'endDate' : endDate		#yyyy-MM-dd
-					})
+			headers={'Authorization': 'Bearer ' + access_token},
+			params={'type': t_type,
+				'symbol': symbol,
+				'startDate' : startDate,	#yyyy-MM-dd
+				'endDate' : endDate		#yyyy-MM-dd
+				})
 	return resp.json()
 
 
